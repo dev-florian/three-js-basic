@@ -91,34 +91,36 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Animate
  */
-var lastScrollTop = 0;
+var oldScrollY = window.scrollY;
 
 let scrollAnimation = e => {
-    sphere.rotation.y = window.scrollY * 0.01;
 
-    var st = window.pageYOffset || document.documentElement.scrollTop; // Credits: "https://github.com/qeremy/so/blob/master/so.dom.js#L426"
-    if (st > lastScrollTop) {
-        // downscroll code
-        pointLight.intensity = pointLight.intensity + (window.scrollY * 0.004);
-        pointLight2.intensity = pointLight2.intensity + (window.scrollY * 0.004);
+        // Calculate scrolls here
+        sphere.rotation.y = window.scrollY * 0.01;
 
-        if(window.scrollY < window.innerHeight){
-            sphere.position.x = sphere.position.x + 1 * 0.005;
-        }else{
-            sphere.position.x = sphere.position.x - 1 * 0.01;
+        if(oldScrollY < window.scrollY){
+            // downscroll code
+            pointLight.intensity = pointLight.intensity + (window.scrollY * 0.004);
+            pointLight2.intensity = pointLight2.intensity + (window.scrollY * 0.004);
+
+            if(window.scrollY < window.innerHeight){
+                sphere.position.x = sphere.position.x + 1 * 0.005;
+            }else{
+                sphere.position.x = sphere.position.x - 1 * 0.01;
+            }
+        } else {
+            // upscroll code
+            pointLight.intensity = pointLight.intensity - (window.scrollY * 0.004);
+            pointLight2.intensity = pointLight2.intensity - (window.scrollY * 0.004);
+
+            if(window.scrollY < window.innerHeight){
+                sphere.position.x = sphere.position.x - 1 * 0.005;
+            }else{
+                sphere.position.x = sphere.position.x + 1 * 0.01;
+            }
         }
-    } else {
-        // upscroll code
-        pointLight.intensity = pointLight.intensity - (window.scrollY * 0.004);
-        pointLight2.intensity = pointLight2.intensity - (window.scrollY * 0.004);
+        oldScrollY = window.scrollY;
 
-        if(window.scrollY < window.innerHeight){
-            sphere.position.x = sphere.position.x - 1 * 0.005;
-        }else{
-            sphere.position.x = sphere.position.x + 1 * 0.01;
-        }
-    }
-    lastScrollTop = st <= 0 ? 0 : st; // For Mobile or negative scrolling
 };
 
 window.addEventListener('scroll', scrollAnimation);

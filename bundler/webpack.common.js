@@ -15,7 +15,7 @@ module.exports = {
     [
         new CopyWebpackPlugin({
             patterns: [
-                { from: path.resolve(__dirname, '../assets/textures') }
+                { from: path.resolve(__dirname, '../assets') }
             ]
         }),
         new HtmlWebpackPlugin({
